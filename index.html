@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>World Action Planner: Generalizable Decision-Making with Action-Conditioned World Models</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #5d667a;
+      --line: #d9deea;
+      --accent: #2f6fed;
+      --shadow: 0 10px 30px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 180px, var(--bg) 100%);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(47, 111, 237, 0.12);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.05;
+    }
+
+    .placeholder {
+      color: #7a859a;
+      font-style: normal;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 78ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 48px;
+      width: min(100%, 560px);
+      margin: 0 auto;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .author-pair {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .author-name {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .author-affiliation,
+    .contact {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .contact {
+      grid-column: 1 / -1;
+      margin-top: 6px;
+    }
+
+    .resource-links {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .resource-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f8faff;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .resource-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .resource-icon {
+      width: 18px;
+      height: 18px;
+      display: block;
+      flex: 0 0 auto;
+      object-fit: contain;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .section h2 {
+      margin: 0 0 16px;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .abstract {
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid.media {
+      grid-template-columns: 1fr;
+    }
+
+    .figure-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fbfcff;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 340px;
+    }
+
+    .figure-frame {
+      width: 100%;
+      min-height: 420px;
+      border: 0;
+      display: block;
+      background: #eef2f8;
+    }
+
+    .figure-image {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      background: #eef2f8;
+      object-fit: contain;
+    }
+
+    .figure-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .figure-link:hover {
+      text-decoration: underline;
+    }
+
+    .figure-meta {
+      padding: 14px 16px 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .video-wrap {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      background: #0f172a;
+      aspect-ratio: 16 / 9;
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .figures {
+      grid-template-columns: 1fr;
+    }
+
+
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1><span class="placeholder">World Action Planner: Generalizable Decision-Making with Action-Conditioned World Models</span></h1>
+      <div class="hero-meta">
+        <div class="author-pair">
+          <p class="author-name"><span class="placeholder">Xiangcheng Zhang</span></p>
+          <p class="author-affiliation"><span class="placeholder">Independent Researcher</span></p>
+        </div>
+        <div class="author-pair">
+          <p class="author-name"><span class="placeholder">Yilun Du</span></p>
+          <p class="author-affiliation"><span class="placeholder">Harvard University</span></p>
+        </div>
+      </div>
+      <p class="contact">
+        <span class="placeholder">Corresponding email: ydu@seas.harvard.edu</span>
+      </p>
+      <div class="resource-links">
+        <a class="resource-button" href="https://github.com/XiangchengZhang/world-action-planner.git" target="_blank" rel="noopener" aria-label="GitHub link placeholder">
+          <img class="resource-icon" src="GitHub_Invertocat_Black.svg" alt="GitHub logo" />
+          <span>GitHub</span>
+        </a>
+        <a class="resource-button" href="https://huggingface.co/XiangchengZhang/world-action-planner" target="_blank" rel="noopener" aria-label="Hugging Face link placeholder">
+          <img class="resource-icon" src="hf-logo.svg" alt="Hugging Face logo" />
+          <span>Hugging Face</span>
+        </a>
+        <a class="resource-button" href="#" target="_blank" rel="noopener" aria-label="PDF link placeholder">
+          <svg class="resource-icon" viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <rect x="1" y="1" width="22" height="22" rx="5" fill="#dc2626"></rect>
+            <text x="12" y="15" fill="#ffffff" font-size="8" text-anchor="middle" font-family="Arial, Helvetica, sans-serif">PDF</text>
+          </svg>
+          <span>PDF</span>
+        </a>
+        <a class="resource-button" href="#" target="_blank" rel="noopener" aria-label="arXiv link placeholder">
+          <img class="resource-icon" src="arxiv-logomark-small.svg" alt="arXiv logo" />
+          <span>arXiv</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Abstract</h2>
+      <p class="abstract">
+        <span class="placeholder">
+          Building generalizable agents for diverse applications remains a fundamental challenge. While imitation learning-based policies succeed in specific training environments, they often fail to generalize to novel scenes and tasks. In this work, we propose <strong>World Action Planner</strong>, a robot planning system that leverages the reasoning capabilities of Vision-Language Models (VLMs) and the physical grounding of a multi-task pose-image conditioned world model. Our system enables an agent to propose initial action plans and iteratively refine them via optimization and search, reasoning over imagined world model rollouts. We demonstrate that our approach achieves superior performance across compositional tasks, new layouts, and zero-shot generalization scenarios, significantly outperforming state-of-the-art end-to-end policy models such as VLAs and WAMs.
+        </span>
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="figure-card">
+        <img class="figure-image" src="teaser.svg" alt="Teaser figure preview" />
+        <div class="figure-meta">
+        
+          <span class="placeholder">We introduce <strong>World Action Planner</strong>, a planning system in which the agent reasons about and refines its action plans via world model imagination, generalizing to novel scenarios and solving new tasks at test time.</span>
+          <!-- <br /> -->
+          <!-- <a class="figure-link" href="teaser.svg" target="_blank" rel="noopener">Open teaser.svg</a> -->
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="video-wrap">
+        <video id="demo-video" class="paper-video" controls preload="metadata">
+          <source src="demo.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Algorithm</h2>
+      <div class="figure-card">
+        <img class="figure-image" src="algorithm.svg" alt="Algorithm preview" />
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Generalizable Decision-Making</h2>
+      <div class="grid figures">
+        <article class="figure-card">
+          <img class="figure-image" src="libero_10_fig.svg" alt="Figure 1 preview" />
+          <div class="figure-meta">
+            <span class="label">Compositional Generalization</span><br />
+            <span class="placeholder">We evaluate compositional generalization on LIBERO-Long tasks, each composed of two LIBERO-90 tasks seen during training. After completing the first subtask, the VLM proposes transition actions toward the next object, and the action-conditioned world model imagines the resulting rollout to verify that the policy can subsequently resume and complete the next subtask.</span>
+          </div>
+        </article>
+
+        <article class="figure-card">
+          <img class="figure-image" src="libero_object_extented.svg" alt="Figure 2 preview" />
+          <div class="figure-meta">
+            <span class="label">New Layout Generalization</span><br />
+            <span class="placeholder">We evaluate our method on LIBERO-Object tasks with modified object layouts. The VLM agent identifies the relocated target object and navigates the gripper to its proximity, where a weak policy can reliably complete the grasp. The action-conditioned world model then imagines placement trajectory, allowing the planner to detect and avoid potential collision risks before execution.</span>
+          </div>
+        </article>
+
+        <article class="figure-card">
+          <img class="figure-image" src="robosuite_fig.svg" alt="Figure 3 preview" />
+          <div class="figure-meta">
+            <span class="label">Zero-Shot Generalization</span><br />
+            <span class="placeholder">We evaluate on Robosuite StackCube and PickPlaceCan without expert demonstrations or a learned robot policy. Using only hard-coded grasp/release primitives, the planner leverages world model imagination to iteratively refine fine-grained actions, such as precise cube alignment for successful stacking.</span>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Robot World Model</h2>
+      <div class="grid media">
+        <article class="figure-card">
+          <img class="figure-image" src="pose-condition.svg" alt="World model preview" />
+          <div class="figure-meta">
+            <span class="label">Pose-Image Conditioned World Model</span><br />
+            <span class="placeholder">We compute the robot joint pose using forward dynamics of the actions, and render them as joint skeleton images from the corresponding view-point. Then use the pose images as conditions for action-conditioned world modeling.</span>
+          </div>
+        </article>
+        <article>
+          <div class="video-wrap">
+            <video id="wm-video" class="paper-video" controls preload="metadata">
+              <source src="wm_demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script>
+    const paperVideos = document.querySelectorAll('video.paper-video');
+    paperVideos.forEach(video => {
+      video.addEventListener('loadeddata', () => {
+        video.currentTime = 0;
+        video.pause();
+      }, { once: true });
+
+      video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        video.pause();
+      });
+    });
+  </script>
+</body>
+</html>
