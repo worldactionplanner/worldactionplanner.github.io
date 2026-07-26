@@ -143,6 +143,16 @@
       color: var(--accent);
     }
 
+    .resource-button--coming-soon {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    .resource-button--coming-soon:hover {
+      border-color: var(--border);
+      color: inherit;
+    }
+
     .resource-icon {
       width: 18px;
       height: 18px;
@@ -281,14 +291,14 @@
         <span class="placeholder">Corresponding email: ydu@seas.harvard.edu</span>
       </p>
       <div class="resource-links">
-        <a class="resource-button" href="https://github.com/XiangchengZhang/world-action-planner.git" target="_blank" rel="noopener" aria-label="GitHub link placeholder">
+        <span class="resource-button resource-button--coming-soon" role="status" aria-label="GitHub coming soon">
           <img class="resource-icon" src="GitHub_Invertocat_Black.svg" alt="GitHub logo" />
-          <span>GitHub</span>
-        </a>
-        <a class="resource-button" href="https://huggingface.co/XiangchengZhang/world-action-planner" target="_blank" rel="noopener" aria-label="Hugging Face link placeholder">
+          <span>GitHub — Coming soon</span>
+        </span>
+        <span class="resource-button resource-button--coming-soon" role="status" aria-label="Hugging Face coming soon">
           <img class="resource-icon" src="hf-logo.svg" alt="Hugging Face logo" />
-          <span>Hugging Face</span>
-        </a>
+          <span>Hugging Face — Coming soon</span>
+        </span>
         <a class="resource-button" href="world_action_planner_arxiv.pdf" target="_blank" rel="noopener" aria-label="PDF link">
           <svg class="resource-icon" viewBox="0 0 24 24" role="img" aria-hidden="true">
             <rect x="1" y="1" width="22" height="22" rx="5" fill="#dc2626"></rect>
